@@ -1,7 +1,6 @@
 {
-  "name": "Blogger",
+  "name": "tod",
   "version": "0.0.0",
-  "homepage": "https://github.com/noobandy/node-template-project",
   "license": "MIT",
   "ignore": [
     "**/.*",

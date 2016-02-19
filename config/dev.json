@@ -8,7 +8,7 @@
 		"algorithm" : "HS256"
 	},
 	"db" : {
-		"url" : "mongodb://localhost:27017/template_project",
+		"url" : "mongodb://localhost:27017/todo_application",
 		"username" : "",
 		"password" : "",
 		"options" : {
