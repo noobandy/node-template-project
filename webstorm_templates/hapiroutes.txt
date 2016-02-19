@@ -77,7 +77,7 @@ var routes = [{
             var id = request.params.id;
             var payload = request.payload;
 
-            ${MODEL}.findByIdAndUpdate(id, payload, function(err, result) {
+            ${MODEL}.findByIdAndUpdate(id, {$set : payload}, function(err, result) {
 
                 if(err) {
                     return reply(Boom.badImplementation(err.message));
