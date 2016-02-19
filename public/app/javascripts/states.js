@@ -55,9 +55,10 @@ angular.module("App").config(["$stateProvider", "$urlRouterProvider",
 			secure : true
 		}
 	}).state({
-        name : "auth success",
-		url : "/authsuccess",
-		templateUrl : "/public/app/templates/authsuccess.html"
+        name : "dashboard",
+		url : "/dashboard",
+		templateUrl : "/public/app/templates/dashboard.html",
+		controller : "DashboardController"
 	});
 }]);
 
