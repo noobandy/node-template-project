@@ -148,7 +148,7 @@ App.controller("ChangePasswordController", ["$scope", "$rootScope", "User", "Aut
 
     }]);
 
-App.controller("DashboardController", ["$scope",function($scope) {
+App.controller("DashboardController", ["$scope", "localStorageService", function($scope, localStorageService) {
 
     $scope.alerts = [];
 
@@ -160,7 +160,11 @@ App.controller("DashboardController", ["$scope",function($scope) {
 
     $scope.newTodo = {};
 
+    $scope.syncRequired = false;
+
     $scope.addTodo = function(newTodo) {
+
+        $scope.syncRequired = true;
 
         $scope.todos.unshift({title : newTodo.title, description : newTodo.description, dueDate : newTodo.dueDate});
 

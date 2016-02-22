@@ -17,7 +17,7 @@ var routes = [{
             ToDo.find({author : authenticatedUser}, function (err, docs) {
 
                 if (err) {
-                    return Boom.badImplementation(err.message);
+                    return reply(Boom.badImplementation(err));
                 }
 
                 return reply(docs);
@@ -33,6 +33,12 @@ var routes = [{
     path: "/todos/{id}",
     config: {
         auth : "jwt",
+        validate : {
+            params : {
+                //mongodb object id
+                id : Joi.string().hex().length(24).required()
+            }
+        },
         handler: function (request, reply) {
             var authenticatedUser = request.auth.credentials;
             var id = request.params.id;
@@ -40,7 +46,12 @@ var routes = [{
             ToDo.findOne({author : authenticatedUser, _id : id}, function (err, doc) {
 
                 if (err) {
-                    return Boom.badImplementation(err.message);
+                    return reply(Boom.badImplementation(err));
+                }
+
+                if(!doc) {
+                    //not found
+                    return reply(Boom.notFound("not found"));
                 }
 
                 return reply(doc);
@@ -72,7 +83,7 @@ var routes = [{
             resource.save(function (err, doc) {
 
                 if (err) {
-                    return reply(Boom.badImplementation(err.message));
+                    return reply(Boom.badImplementation(err));
                 }
 
                 return reply(doc);
@@ -89,6 +100,10 @@ var routes = [{
     config: {
         auth : "jwt",
         validate : {
+            params : {
+                //mongodb object id
+                id : Joi.string().hex().length(24).required()
+            },
             payload : {
                 title : Joi.string().required(),
                 description : Joi.string().required(),
@@ -101,13 +116,13 @@ var routes = [{
             var payload = request.payload;
             payload.author = authenticatedUser
 
-            ToDo.findOneAndUpdate({author : authenticatedUser, _id : id}, {$set : payload}, function (err, result) {
+            ToDo.update({author : authenticatedUser, _id : id}, {$set : payload}, function (err, result) {
 
                 if (err) {
-                    return reply(Boom.badImplementation(err.message));
+                    return reply(Boom.badImplementation(err));
                 }
 
-                return reply(result);
+                return reply();
             });
         },
         description: "Update ToDo",
@@ -119,14 +134,20 @@ var routes = [{
     path: "/todos/{id}/complete",
     config: {
         auth : "jwt",
+        validate : {
+            params : {
+                //mongodb object id
+                id : Joi.string().hex().length(24).required()
+            }
+        },
         handler: function (request, reply) {
             var id = request.params.id;
             var authenticatedUser = request.auth.credentials;
 
-            ToDo.findOneAndUpdate({author : authenticatedUser, _id : id}, {$set : {completedAt : new Date()}}, function (err, result) {
+            ToDo.update({author : authenticatedUser, _id : id}, {$set : {completedAt : new Date()}}, function (err, result) {
 
                 if (err) {
-                    return reply(Boom.badImplementation(err.message));
+                    return reply(Boom.badImplementation(err));
                 }
 
                 return reply(result);
@@ -142,17 +163,23 @@ var routes = [{
     path: "/todos/{id}",
     config: {
         auth : "jwt",
+        validate : {
+            params : {
+                //mongodb object id
+                id : Joi.string().hex().length(24).required()
+            }
+        },
         handler: function (request, reply) {
             var id = request.params.id;
             var authenticatedUser = request.auth.credentials;
 
-            ToDo.findOneAndRemove({author : authenticatedUser, _id : id}, function (err, result) {
+            ToDo.remove({author : authenticatedUser, _id : id}, function (err, result) {
 
                 if (err) {
-                    return reply(Boom.badImplementation(err.message));
+                    return reply(Boom.badImplementation(err));
                 }
 
-                return reply(result);
+                return reply();
             });
         },
         description: "Delete ToDo",
