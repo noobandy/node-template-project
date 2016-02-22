@@ -148,7 +148,7 @@ App.controller("ChangePasswordController", ["$scope", "$rootScope", "User", "Aut
 
     }]);
 
-App.controller("DashboardController", ["$scope", "localStorageService", function($scope, localStorageService) {
+App.controller("DashboardController", ["$scope",function($scope) {
 
     $scope.alerts = [];
 
